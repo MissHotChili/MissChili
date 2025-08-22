@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Miss Chili</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', 'Segoe UI', sans-serif;
+    }
+    
+    body {
+      background-color: #faf9f9;
+      color: #faf7f7;
+      overflow-x: hidden;
+      height: 100%;
+    }
+
+    /* 🌶️ Top Left Logo + Heading */
+    .brand-top {
+      position: fixed;
+      top: 15px;
+      left: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      z-index: 200;
+    }
+
+    .brand-logo {
+      font-size: 2.5rem;
+    }
+
+    .brand-text {
+      font-size: 1.8rem;
+      font-weight: bold;
+      color: #ff3300;
+      text-shadow: 2px 2px 0px #000;
+    }
+    
+    .gif-background {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      overflow: hidden;
+    }
+    
+    .gif-slide {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      transition: opacity 1.5s ease-in-out;
+      object-fit: cover;
+      filter: brightness(0.7);
+    }
+    
+    .gif-slide.active {
+      opacity: 1;
+    }
+    
+    .content-container {
+      position: relative;
+      z-index: 2;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+    
+    header {
+      text-align: center;
+      padding: 80px 0 40px;
+      margin-bottom: 30px;
+    }
+    
+    .logo-icon {
+      font-size: 5rem;
+      color: #ff3300;
+      animation: pulse 2s infinite;
+      margin-bottom: 15px;
+      text-shadow: 3px 3px 0px #000;
+    }
+    
+    h1 {
+      font-size: 4rem;
+      color: #ff3300;
+      text-shadow: 3px 3px 0px #000;
+      margin-bottom: 15px;
+      line-height: 1.1;
+    }
+    
+    h2 {
+      font-size: 2.8rem;
+      color: #ff3300;
+      text-shadow: 2px 2px 0px #000;
+      margin-bottom: 25px;
+      text-align: center;
+    }
+    
+    .tagline {
+      font-style: italic;
+      font-weight: bold;
+      font-size: 1.8rem;
+      display: block;
+      margin: 15px 0;
+      color: #ffcc00;
+      text-shadow: 1px 1px 0px #000;
+    }
+    
+    section {
+      padding: 40px;
+      text-align: center;
+      background: rgba(0, 0, 0, 0);
+      margin: 40px 0;
+      border-radius: 20px;
+      border: 3px solid #ff330000;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    }
+    
+    p {
+      font-size: 1.4rem;
+      margin-bottom: 20px;
+      color: #fff;
+      line-height: 1.6;
+    }
+    
+    .emoji {
+      font-size: 2rem;
+      margin: 0 5px;
+    }
+    
+    .step {
+      margin-bottom: 35px;
+      padding: 0 10px;
+    }
+    
+    .step h3 {
+      font-size: 1.8rem;
+      color: #ffcc00;
+      margin-bottom: 15px;
+      text-align: center;
+    }
+    
+    .social-icons {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      margin: 40px 0;
+    }
+    
+    .social-icons a {
+      color: #ff3300;
+      font-size: 3.5rem;
+      transition: all 0.3s;
+    }
+    
+    .social-icons a:hover {
+      color: #ffcc00;
+      transform: translateY(-5px);
+    }
+    
+    .humor-text {
+      font-size: 1.4rem;
+      color: #ffcc00;
+      margin: 20px 0;
+      font-style: italic;
+      font-weight: bold;
+    }
+    
+    .warning-text {
+      font-size: 1.3rem;
+      color: #ff3300;
+      margin: 20px 0;
+      font-style: italic;
+      font-weight: bold;
+    }
+    
+    .music-control {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: rgba(255, 51, 0, 0.9);
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      z-index: 100;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+      transition: all 0.3s;
+      border: 3px solid #000;
+    }
+    
+    .music-control:hover {
+      transform: scale(1.1);
+      background: rgba(255, 51, 0, 1);
+    }
+    
+    .music-control i {
+      color: white;
+      font-size: 2rem;
+    }
+
+    /* 🌶️ Falling Chilis */
+    .chili {
+      position: absolute;
+      font-size: 24px;
+      animation: floatChili 8s linear infinite;
+    }
+    
+    @keyframes floatChili {
+      0% { transform: translateY(-10vh) rotate(0deg); opacity: 0; }
+      10% { opacity: 1; }
+      90% { opacity: 0.8; }
+      100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+    }
+    
+    /* 🔽 Bottom Action Buttons */
+    .action-bar {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      z-index: 150;
+    }
+
+    .action-btn {
+      padding: 12px 20px;
+      border-radius: 10px;
+      font-size: 1.2rem;
+      font-weight: bold;
+      text-decoration: none;
+      border: 3px solid #000;
+      text-align: center;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.4);
+      transition: all 0.3s ease;
+    }
+
+    .buy-btn {
+      background: #ff3300;
+      color: #fff;
+    }
+    .buy-btn:hover {
+      background: #ff6600;
+      transform: translateY(-3px);
+    }
+
+    .x-btn {
+      background: #1DA1F2;
+      color: #fff;
+    }
+    .x-btn:hover {
+      background: #0d8ddb;
+      transform: translateY(-3px);
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+      100% { transform: scale(1); }
+    }
+  </style>
+</head>
+<body>
+  <!-- 🌶️ Top Left Logo + Heading -->
+  <div class="brand-top">
+    <span class="brand-logo">🌶️</span>
+    <span class="brand-text">MISS CHILI</span>
+  </div>
+
+  <!-- Full Background GIFs -->
+  <div class="gif-background">
+    <img class="gif-slide active" src="miss-chili6.gif" alt="Miss Chili Background">
+    <img class="gif-slide" src="miss-chili5.gif" alt="Miss Chili Background">
+  </div>
+
+  <!-- Falling Chilis -->
+  <div id="chili-container"></div>
+
+  <div class="content-container">
+    <header>
+      <div class="logo-icon"></div>
+      <h1></h1>
+      <p class="tagline">Spice up your crypto portfolio baby</p>
+      <p class="tagline">Too hot to handle, too spicy to dump</p>
+      <p class="tagline">Lick the gains, taste the spice</p>
+      <p class="warning-text">Warning: May cause spontaneous dancing and empty wallets</p>
+      <p class="warning-text">Not responsible for heartburn from massive gains</p>
+      <p class="warning-text">More To Come Soon</p>
+    </header>
+
+    <!-- your roadmap, how-to-buy, social remain unchanged -->
+  </div>
+
+  <!-- 🔽 Bottom Action Buttons -->
+  <div class="action-bar">
+    <a href="https://pump.fun" target="_blank" class="action-btn buy-btn">🔥 Buy Chili Now</a>
+    <a href="https://x.com/ChilliMiss" target="_blank" class="action-btn x-btn">🐦 Join Chili on X</a>
+  </div>
+
+  <!-- Background Music -->
+  <audio id="bg-music" loop>
+    <source src="miss-chili-theme1.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+  </audio>
+  
+  <!-- Music Control -->
+  <div class="music-control" id="music-toggle">
+    <i class="fas fa-volume-mute"></i>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const audio = document.getElementById('bg-music');
+      const musicToggle = document.getElementById('music-toggle');
+      const slides = document.querySelectorAll('.gif-slide');
+      const chiliContainer = document.getElementById('chili-container');
+      
+      let currentSlide = 0;
+      let isPlaying = false;
+      
+      function showSlide(index) {
+        slides.forEach(slide => slide.classList.remove('active'));
+        slides[index].classList.add('active');
+        currentSlide = index;
+      }
+      
+      function nextSlide() {
+        let nextIndex = (currentSlide + 1) % slides.length;
+        showSlide(nextIndex);
+      }
+      setInterval(nextSlide, 5000);
+      
+      // 🌶️ Falling Chilis
+      function createChilis() {
+        const numChilis = 25;
+        for (let i = 0; i < numChilis; i++) {
+          const chili = document.createElement('div');
+          chili.className = 'chili';
+          chili.textContent = '🌶️';
+          chili.style.left = Math.random() * 100 + 'vw';
+          chili.style.animationDuration = (Math.random() * 10 + 5) + 's';
+          chili.style.fontSize = (Math.random() * 20 + 15) + 'px';
+          chiliContainer.appendChild(chili);
+        }
+      }
+      createChilis();
+      
+      // 🎵 Music Control
+      musicToggle.addEventListener('click', function() {
+        if (isPlaying) {
+          audio.pause();
+          musicToggle.innerHTML = '<i class="fas fa-volume-mute"></i>';
+        } else {
+          audio.play().catch(() => alert('Click anywhere on the page first to enable audio'));
+          musicToggle.innerHTML = '<i class="fas fa-volume-up"></i>';
+        }
+        isPlaying = !isPlaying;
+      });
+      
+      function enableAudio() {
+        document.body.removeEventListener('click', enableAudio);
+        document.body.removeEventListener('touchstart', enableAudio);
+        audio.play().then(() => {
+          isPlaying = true;
+          musicToggle.innerHTML = '<i class="fas fa-volume-up"></i>';
+        }).catch(() => {
+          musicToggle.innerHTML = '<i class="fas fa-volume-mute"></i>';
+        });
+      }
+      document.body.addEventListener('click', enableAudio);
+      document.body.addEventListener('touchstart', enableAudio);
+    });
+  </script>
+</body>
+</html>
